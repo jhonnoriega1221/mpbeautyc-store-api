@@ -3,6 +3,8 @@ const { Schema, model } = require('mongoose');
 const productoSchema = new Schema({
     name:String,
     status:String,
+    category:String,
+    brand:String,
     actualPrice:Number,
     originalPrice:Number,
     discount:Number,

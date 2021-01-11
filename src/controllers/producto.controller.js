@@ -4,6 +4,8 @@ let Producto = require('../models/Producto')
 const createProducto = async function createProducto(req, res){
     const { name,
             status,
+            category,
+            brand,
             actualPrice,
             originalPrice,
             discount,
@@ -20,6 +22,8 @@ const createProducto = async function createProducto(req, res){
     const newProducto = {
         name:name,
         status:status,
+        category:category,
+        brand:brand,
         actualPrice:actualPrice,
         originalPrice:originalPrice,
         discount:discount,
@@ -48,11 +52,19 @@ const createProducto = async function createProducto(req, res){
 
 //Leer productos
 const readProductos = async function readProductos(req, res){
-    const productos = await Producto.find();
+    const productos = await Producto.find().sort({"createdAt": -1});
     return res.json(productos);
+}
+
+//Consultar información de un producto especifico
+const readProducto = async function readProducto(req, res){
+	const {id} = req.params;
+	const producto = await Producto.findById(id);
+	return res.json(producto);
 }
 
 module.exports = {
     createProducto:createProducto,
-    readProductos:readProductos
+    readProductos:readProductos,
+    readProducto:readProducto
 }
