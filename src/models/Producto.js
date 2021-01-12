@@ -19,6 +19,8 @@ const productoSchema = new Schema({
     timestamps: true
 });
 
+productoSchema.index({ name: 'text'});
+
 productoSchema.methods.setImgUrl = function setImgUrl( filename ){
     this.imgUrl = 'http://localhost:3000/public/'+filename;
 }

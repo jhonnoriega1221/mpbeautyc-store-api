@@ -12,7 +12,10 @@ router.route('/producto')
 	.post(upload.single('image'), productoController.createProducto);
 
 router.route('/producto/:id')
-	.get(preguntaController.readPreguntas);
+	.get(productoController.readProducto);
+
+router.route('/?busqueda=:query')
+	.get(productoController.buscarProducto);
 
 	/*-----------RUTAS PREGUNTAS------------*/
 router.route('/pregunta')

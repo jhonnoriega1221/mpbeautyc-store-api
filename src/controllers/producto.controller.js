@@ -63,8 +63,16 @@ const readProducto = async function readProducto(req, res){
 	return res.json(producto);
 }
 
+const buscarProducto = async function buscarProducto(req, res){
+    const{ query } = req.params;
+
+    const producto = await Producto.find({$text: {$search: query}});
+    return res.json(producto);
+}
+
 module.exports = {
     createProducto:createProducto,
     readProductos:readProductos,
-    readProducto:readProducto
+    readProducto:readProducto,
+    buscarProducto:buscarProducto
 }
