@@ -6,12 +6,13 @@ const router = Router();
 const productoController = require('../controllers/producto.controller');
 const preguntaController = require('../controllers/pregunta.controller');
 const opinionController = require ('../controllers/opinion.controller');
-const authController = require('../controllers/auth.controller');
+const authController = require('../auth/auth.controller');
 const verifyToken = require('../auth/verifyToken');
+const userController = require('../controllers/user.controller');
 
 /*----------------RUTAS AUTH----------------------*/
 router.route('/auth/signup')
-	.post(authController.registerUsuario);
+	.post(userController.registerUsuario);
 
 router.route('/auth/login')
 	.post(authController.loginUsuario);
@@ -19,9 +20,12 @@ router.route('/auth/login')
 router.route('/auth/logout')
 	.get(authController.logoutUsuario);
 
-router.route('/auth/profile')
-	.get(verifyToken, authController.getProfileUsuario);
-/*--------------RUTAS PRODUCTO---------------- */
+/*--------------RUTAS USUARIO---------------- */
+
+router.route('/user')
+	.get(verifyToken, userController.getUsuario);
+
+/*-----------------RUTAS PRODUCTO------------------- */
 router.route('/producto') //Todos los productos de la base de datos
 	.get(productoController.readProductos)
 	.post(upload.single('image'), productoController.createProducto); //Crear producto

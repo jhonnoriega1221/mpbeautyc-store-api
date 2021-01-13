@@ -24,3 +24,5 @@ app.use('/public', express.static('./uploads'));
 app.listen(app.get('port'), () =>{
     console.log('Server on port', app.get('port'));
 });
+
+//Auth backend by: https://www.freecodecamp.org/news/securing-node-js-restful-apis-with-json-web-tokens-9f811a92bb52/
