@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const ShoppingCart = require('../models/ShoppingCart');
+const shoppingCartController = require('./shoppingCart.controller');
 
 
 const registerUsuario = async function registerUsuario(req, res){
@@ -26,7 +28,7 @@ const registerUsuario = async function registerUsuario(req, res){
     
 
     const hashedPassword = bcrypt.hashSync(req.body.password, 8);
-    User.create({
+    await User.create({
         email : req.body.email,
         password : hashedPassword,
         name : req.body.name,
@@ -36,10 +38,22 @@ const registerUsuario = async function registerUsuario(req, res){
         addressComplement : req.body.addressComplement,
         country : req.body.country,
         city : req.body.city,
-        phoneNumber : req.body.phoneNumber
+        phoneNumber : req.body.phoneNumber,
+        wishList:[]
     },
-    function(err, user){
+    async function(err, user){
         if(err) return res.status(500).send('Hubo un problema con el registro.')
+
+        //Se crea el carrito de compras
+
+        const newShoppingCart = {
+            userId:user._id,
+            products:[]
+        }
+
+        const shoppingCart = new ShoppingCart(newShoppingCart);
+        await shoppingCart.save();
+
         //Se crea el token
         const token = jwt.sign({id:user._id}, process.env.SECRET_KEY,{
             expiresIn: 86400 //Vence en 24 horas

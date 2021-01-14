@@ -7,12 +7,13 @@ const productoController = require('../controllers/producto.controller');
 const preguntaController = require('../controllers/pregunta.controller');
 const opinionController = require ('../controllers/opinion.controller');
 const authController = require('../auth/auth.controller');
+const shoppingCartController = require ('../controllers/shoppingCart.controller');
+const wishListController = require ('../controllers/wishlist.controller');
 const verifyToken = require('../auth/verifyToken');
 const userController = require('../controllers/user.controller');
 
 /*----------------RUTAS AUTH----------------------*/
-router.route('/auth/signup')
-	.post(userController.registerUsuario);
+
 
 router.route('/auth/login')
 	.post(authController.loginUsuario);
@@ -24,6 +25,9 @@ router.route('/auth/logout')
 
 router.route('/user')
 	.get(verifyToken, userController.getUsuario);
+
+router.route('/user/signup')
+	.post(userController.registerUsuario);
 
 /*-----------------RUTAS PRODUCTO------------------- */
 router.route('/producto') //Todos los productos de la base de datos
@@ -52,5 +56,21 @@ router.route('/opinion')
 
 router.route('/opinion/:id') //Opiniones de un producto en especifico
 	.get(opinionController.readOpinionProd);
+
+	/*-------------RUTAS CARRITO DE COMPRAS------------------ */
+router.route('/shoppingCart')
+	.get(verifyToken, shoppingCartController.readShoppingCart)
+	.put(verifyToken, shoppingCartController.updateShoppingCart);
+
+router.route('/shoppingCart/:productId')	
+	.delete(verifyToken, shoppingCartController.deleteShoppingCartItem);
+
+	/*--------------------RUTAS LISTA DE FAVORITOS--------------------- */
+router.route('/wishlist')
+	.put(verifyToken, wishListController.updateWishList)
+	.get(verifyToken, wishListController.getUserWishList);
+
+router.route('/wishlist/:productId')
+	.delete(verifyToken, wishListController.deleteWishListItem);
 
 module.exports = router;

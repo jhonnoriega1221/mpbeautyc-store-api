@@ -1,5 +1,9 @@
 const { Schema, model } = require('mongoose');
 
+const wishListSchema = new Schema({
+    productId:String
+}, {_id:false})
+
 const userSchema = new Schema({
     email:String,
     password:String,
@@ -10,7 +14,8 @@ const userSchema = new Schema({
     addressComplement:String,
     country:String,
     city:String,
-    phoneNumber:Number
+    phoneNumber:Number,
+    wishList:[wishListSchema]
 });
 
 module.exports = model('User', userSchema);
