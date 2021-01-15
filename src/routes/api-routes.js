@@ -58,11 +58,11 @@ router.route('/opinion/:id') //Opiniones de un producto en especifico
 	.get(opinionController.readOpinionProd);
 
 	/*-------------RUTAS CARRITO DE COMPRAS------------------ */
-router.route('/shoppingCart')
+router.route('/shoppingcart')
 	.get(verifyToken, shoppingCartController.readShoppingCart)
 	.put(verifyToken, shoppingCartController.updateShoppingCart);
 
-router.route('/shoppingCart/:productId')	
+router.route('/shoppingcart/:productId')	
 	.delete(verifyToken, shoppingCartController.deleteShoppingCartItem);
 
 	/*--------------------RUTAS LISTA DE FAVORITOS--------------------- */
