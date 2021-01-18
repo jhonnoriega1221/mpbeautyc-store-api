@@ -9,6 +9,7 @@ const opinionController = require ('../controllers/opinion.controller');
 const authController = require('../auth/auth.controller');
 const shoppingCartController = require ('../controllers/shoppingCart.controller');
 const wishListController = require ('../controllers/wishlist.controller');
+const pedidoController = require ('../controllers/pedido.controller');
 const verifyToken = require('../auth/verifyToken');
 const userController = require('../controllers/user.controller');
 
@@ -72,5 +73,16 @@ router.route('/wishlist')
 
 router.route('/wishlist/:productId')
 	.delete(verifyToken, wishListController.deleteWishListItem);
+
+/*-------------------RUTAS DE LOS PEDIDOS--------------- */
+router.route('/pedido/user')
+	.get(verifyToken, pedidoController.obtenerPedidosUsuario);
+
+router.route('/pedido')
+	.post(verifyToken, pedidoController.createPedido);
+
+router.route('/pedido/:pedidoId')
+	.delete(verifyToken, pedidoController.cancelPedido)
+	.get(verifyToken, pedidoController.obtenerPedido);
 
 module.exports = router;
