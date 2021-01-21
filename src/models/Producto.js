@@ -2,9 +2,15 @@ const { Schema, model } = require('mongoose');
 
 const productoSchema = new Schema({
     name:String,
-    status:String,
-    category:String,
-    brand:String,
+    category:{
+        categoryIndex:String,
+        categoryName:String
+    },
+    unsubscribed:Boolean,
+    brand:{
+        brandIndex:String,
+        brandName:String
+    },
     actualPrice:Number,
     originalPrice:Number,
     discount:Number,
@@ -13,7 +19,6 @@ const productoSchema = new Schema({
     stockSize:Number,
     description:String,
     soldTimes:Number,
-    colors:Array,
     imgUrl:String
 },{
     timestamps: true

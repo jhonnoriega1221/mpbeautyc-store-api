@@ -44,7 +44,10 @@ router.route('/producto') //Todos los productos de la base de datos
 	.post(verifyToken.verifyAdminToken, upload.single('image'), productoController.createProducto); //Crear producto
 
 router.route('/producto/:id') //Un producto en especifico
-	.get(productoController.readProducto);
+	.get(productoController.readProducto)
+	.put(verifyToken.verifyAdminToken, productoController.updateProducto)
+	.delete(verifyToken.verifyAdminToken, productoController.unsubscribeProducto)
+	.post(verifyToken.verifyAdminToken, productoController.subscribeProducto)
 
 router.route('/?busqueda=:query') //Resultados de busqueda de productos
 	.get(productoController.buscarProducto);

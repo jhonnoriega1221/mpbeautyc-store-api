@@ -3,38 +3,35 @@ let Producto = require('../models/Producto')
 //Crear producto
 const createProducto = async function createProducto(req, res){
     const { name,
-            status,
-            category,
-            brand,
-            actualPrice,
+            categoryIndex,
+            categoryName,
+            brandIndex,
+            brandName,
             originalPrice,
             discount,
-            rating,
-            opinionQuantity,
             stockSize,
-            description,
-            soldTimes,
-            colors
+            description
         } = req.body;
+
+        const category={categoryIndex, categoryName};
+        const brand={brandIndex, brandName};
 
         
 
     const newProducto = {
         name:name,
-        status:status,
+        unsubscribed:false,
         category:category,
         brand:brand,
-        actualPrice:actualPrice,
+        actualPrice:originalPrice-(originalPrice*(discount/100)),
         originalPrice:originalPrice,
         discount:discount,
-        rating:rating,
-        opinionQuantity:opinionQuantity,
+        rating:0,
+        opinionQuantity:0,
         stockSize:stockSize,
         description:description,
-        soldTimes:soldTimes,
-        colors:colors
+        soldTimes:0
         }
-
 
 
     const producto = new Producto(newProducto);
@@ -70,9 +67,71 @@ const buscarProducto = async function buscarProducto(req, res){
     return res.json(producto);
 }
 
+const updateProducto = async function updateProducto(req, res){
+    const {id} = req.params;
+    const{
+        name,
+        originalPrice,
+        discount,
+        stockSize,
+        description,
+        category = {
+            categoryIndex,
+            categoryName
+        },
+        brand={
+            brandIndex,
+            brandName
+        }
+    } = req.body
+
+
+    const updatedProducto = await Producto.findByIdAndUpdate(id,{
+        name,
+        originalPrice,
+        discount,
+        stockSize,
+        actualPrice:originalPrice-(originalPrice*(discount/100)),
+        description,
+        category,
+        brand
+        },{new:true});
+        return res.json({
+            message: 'Producto actualizado',
+            updatedProducto
+        });
+}
+
+const unsubscribeProducto = async function unsubscribeProducto(req,res){
+    const {id} = req.params;
+    const unsubscribedProducto = await Producto.findByIdAndUpdate(id,{
+        unsubscribed:true
+    });
+
+    return res.json({
+        message:'Producto dado de baja',
+        unsubscribedProducto
+    })
+}
+
+const subscribeProducto = async function subscribeProducto(req,res){
+    const {id} = req.params;
+    const subscribedProducto = await Producto.findByIdAndUpdate(id,{
+        unsubscribed:false
+    });
+
+    return res.json({
+        message:'Producto puesto en venta',
+        subscribedProducto
+    })
+}
+
 module.exports = {
     createProducto:createProducto,
     readProductos:readProductos,
     readProducto:readProducto,
-    buscarProducto:buscarProducto
+    buscarProducto:buscarProducto,
+    updateProducto:updateProducto,
+    unsubscribeProducto:unsubscribeProducto,
+    subscribeProducto:subscribeProducto
 }
