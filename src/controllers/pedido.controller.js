@@ -1,9 +1,11 @@
+//Dependencias
 const Producto = require('../models/Producto');
 const Pedido = require('../models/Pedido');
-const { findOneAndUpdate } = require('../models/Pedido');
+
+//funciones
 
 //Crear pedido
-const createPedido = async function createPedido(req, res){
+async function createPedido(req, res){
 
     const userId = req.userId;
     const{
@@ -41,23 +43,22 @@ const createPedido = async function createPedido(req, res){
     }
     await pedido.save();
 
-
-
-
     return res.json({
         message: 'Pedido almacenado',
         pedido
     });
 }
 
-const obtenerPedidosUsuario = async function obtenerPedidosUsuario(req, res){
+//Obtener los pedidos de un usuario
+async function getPedidosUsuario(req, res){
     
     const pedidosUser = await Pedido.find({userId:req.userId})
 
     return res.json(pedidosUser);
 }
 
-const obtenerPedido = async function obtenerPedido(req, res){
+//Obtener un pedido en especifico
+async function getPedido(req, res){
     
     const id = req.params.pedidoId;
 
@@ -66,7 +67,8 @@ const obtenerPedido = async function obtenerPedido(req, res){
     return res.json(pedido);
 }
 
-const cancelPedido = async function cancelPedido(req, res){
+//Cancelar pedido
+async function cancelPedido(req, res){
     const { id } = req.params
 
     await Pedido.findByIdAndUpdate({_id:req.params.pedidoId},{
@@ -83,13 +85,12 @@ const cancelPedido = async function cancelPedido(req, res){
             res.send(result)
         }
     });
-    
 
 }
 
-module.exports ={
-    createPedido:createPedido,
-    cancelPedido:cancelPedido,
-    obtenerPedidosUsuario:obtenerPedidosUsuario,
-    obtenerPedido:obtenerPedido
+module.exports = {
+    createPedido,
+    cancelPedido,
+    getPedidosUsuario,
+    getPedido
 }

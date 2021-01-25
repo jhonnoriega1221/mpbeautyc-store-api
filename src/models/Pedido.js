@@ -1,6 +1,6 @@
 const{ Schema, model } = require('mongoose');
 
-const productoItemSchema = new Schema({
+const pedidoItemSchema = new Schema({
     productId:String,
     productName:String,
     imgUrl:String,
@@ -20,7 +20,7 @@ const pedidoSchema = new Schema({
     shippingCost:Number,
     productsTotal:Number,
     netTotal: Number,
-    products:[productoItemSchema]  
+    products:[pedidoItemSchema]  
 },{
     timestamps:true
 });

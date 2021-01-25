@@ -21,7 +21,9 @@ function verifyAdminToken(req, res, next){
 
     jwt.verify(token, process.env.SECRET_KEY, function(err, decoded){
         if(err)
-        return res.status(500).send({auth: false, message: 'No eres admin 😡'});
+        return res.status(500).send({auth: false, message: 'Datos incorrectos 😡'});
+        if(!decoded.isAdmin)
+        return res.status(500).send({auth: false, message: 'Usted no es el admin, IDENTIFIQUESE!!! 😡'})
 
         req.adminId = decoded.id;
         next();

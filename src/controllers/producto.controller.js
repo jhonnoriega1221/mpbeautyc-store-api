@@ -1,7 +1,10 @@
-let Producto = require('../models/Producto')
+//Dependencias
+const Producto = require('../models/Producto')
 
-//Crear producto
-const createProducto = async function createProducto(req, res){
+//Funciones
+
+//- Crear producto
+async function createProducto(req, res){
     const { name,
             categoryIndex,
             categoryName,
@@ -15,8 +18,6 @@ const createProducto = async function createProducto(req, res){
 
         const category={categoryIndex, categoryName};
         const brand={brandIndex, brandName};
-
-        
 
     const newProducto = {
         name:name,
@@ -33,7 +34,6 @@ const createProducto = async function createProducto(req, res){
         soldTimes:0
         }
 
-
     const producto = new Producto(newProducto);
     if(req.file) {
         const { filename } = req.file;
@@ -47,27 +47,29 @@ const createProducto = async function createProducto(req, res){
     });
 }
 
-//Leer productos
-const readProductos = async function readProductos(req, res){
+//- Leer productos
+async function readProductos(req, res){
     const productos = await Producto.find().sort({"createdAt": -1});
     return res.json(productos);
 }
 
-//Consultar información de un producto especifico
-const readProducto = async function readProducto(req, res){
+//- Leer producto
+async function readProducto(req, res){
 	const {id} = req.params;
 	const producto = await Producto.findById(id);
 	return res.json(producto);
 }
 
-const buscarProducto = async function buscarProducto(req, res){
+//- Buscar producto
+async function buscarProducto(req, res){
     const{ query } = req.params;
 
     const producto = await Producto.find({$text: {$search: query}});
     return res.json(producto);
 }
 
-const updateProducto = async function updateProducto(req, res){
+//- Modificar producto
+async function updateProducto(req, res){
     const {id} = req.params;
     const{
         name,
@@ -102,7 +104,8 @@ const updateProducto = async function updateProducto(req, res){
         });
 }
 
-const unsubscribeProducto = async function unsubscribeProducto(req,res){
+//- Dar de baja a un producto
+async function unsubscribeProducto(req,res){
     const {id} = req.params;
     const unsubscribedProducto = await Producto.findByIdAndUpdate(id,{
         unsubscribed:true
@@ -114,7 +117,8 @@ const unsubscribeProducto = async function unsubscribeProducto(req,res){
     })
 }
 
-const subscribeProducto = async function subscribeProducto(req,res){
+//- Poner a la venta un producto que estaba dado de baja
+async function subscribeProducto(req,res){
     const {id} = req.params;
     const subscribedProducto = await Producto.findByIdAndUpdate(id,{
         unsubscribed:false
@@ -127,11 +131,11 @@ const subscribeProducto = async function subscribeProducto(req,res){
 }
 
 module.exports = {
-    createProducto:createProducto,
-    readProductos:readProductos,
-    readProducto:readProducto,
-    buscarProducto:buscarProducto,
-    updateProducto:updateProducto,
-    unsubscribeProducto:unsubscribeProducto,
-    subscribeProducto:subscribeProducto
+    createProducto,
+    readProductos,
+    readProducto,
+    buscarProducto,
+    updateProducto,
+    unsubscribeProducto,
+    subscribeProducto
 }

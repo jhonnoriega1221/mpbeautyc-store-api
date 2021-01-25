@@ -6,34 +6,30 @@ const router = Router();
 const productoController = require('../controllers/producto.controller');
 const preguntaController = require('../controllers/pregunta.controller');
 const opinionController = require ('../controllers/opinion.controller');
-const authController = require('../auth/auth.controller');
+const adminController = require ('../controllers/admin.controller');
 const shoppingCartController = require ('../controllers/shoppingCart.controller');
 const wishListController = require ('../controllers/wishlist.controller');
 const pedidoController = require ('../controllers/pedido.controller');
 const verifyToken = require('../auth/verifyToken');
-const adminController = require('../controllers/admin.controller');
 const userController = require('../controllers/user.controller');
-
-/*----------------RUTAS AUTH----------------------*/
-
-
-router.route('/auth/login')
-	.post(authController.loginUsuario);
-
-router.route('/auth/admin/login')
-	.post(authController.loginAdmin);
 
 /*--------------RUTAS ADMIN-------------------- */
 router.route('/admin')
-	.get(verifyToken.verifyAdminToken, adminController.getAdmin)
+	.get(verifyToken.verifyAdminToken, adminController.getAdmin);
+
+router.route('/admin/login')
+	.post(adminController.loginAdmin);
 
 router.route('/admin/signup')
-	.post(verifyToken.verifyAdminToken, adminController.registerAdmin);
+	.post(adminController.registerAdmin);
 
 /*--------------RUTAS USUARIO---------------- */
 
 router.route('/user')
 	.get(verifyToken.verifyUserToken, userController.getUsuario);
+
+router.route('/user/login')
+	.post(userController.loginUsuario);
 
 router.route('/user/signup')
 	.post(userController.registerUsuario);
@@ -58,7 +54,7 @@ router.route('/pregunta')
 	.post(verifyToken.verifyUserToken, preguntaController.createPregunta);
 
 router.route('/pregunta/:id') //Preguntas de un producto en especifico
-	.get(preguntaController.readPreguntaProd);
+	.get(preguntaController.readPreguntasProducto);
 
 	/*------------RUTAS OPINIONES-------------- */
 
@@ -67,12 +63,12 @@ router.route('/opinion')
 	.post(verifyToken.verifyUserToken, opinionController.createOpinion);
 
 router.route('/opinion/:id') //Opiniones de un producto en especifico
-	.get(opinionController.readOpinionProd);
+	.get(opinionController.readOpinionProducto);
 
 	/*-------------RUTAS CARRITO DE COMPRAS------------------ */
 router.route('/shoppingcart')
 	.get(verifyToken.verifyUserToken, shoppingCartController.readShoppingCart)
-	.put(verifyToken.verifyUserToken, shoppingCartController.updateShoppingCart);
+	.put(verifyToken.verifyUserToken, shoppingCartController.addShoppingCartItem);
 
 router.route('/shoppingcart/:productId')	
 	.delete(verifyToken.verifyUserToken, shoppingCartController.deleteShoppingCartItem);
@@ -87,13 +83,13 @@ router.route('/wishlist/:productId')
 
 /*-------------------RUTAS DE LOS PEDIDOS--------------- */
 router.route('/pedido/user')
-	.get(verifyToken.verifyUserToken, pedidoController.obtenerPedidosUsuario);
+	.get(verifyToken.verifyUserToken, pedidoController.getPedidosUsuario);
 
 router.route('/pedido')
 	.post(verifyToken.verifyUserToken, pedidoController.createPedido);
 
 router.route('/pedido/:pedidoId')
 	.delete(verifyToken.verifyUserToken, pedidoController.cancelPedido)
-	.get(verifyToken.verifyUserToken, pedidoController.obtenerPedido);
+	.get(verifyToken.verifyUserToken, pedidoController.getPedido);
 
 module.exports = router;

@@ -37,7 +37,7 @@ const readOpiniones = async function readOpiniones(req, res){
 }
 
 //Consultar las preguntas de un producto especifico
-const readOpinionProd = async function readOpinionProd(req, res){
+const readOpinionProducto = async function readOpinionProducto(req, res){
 	const {id} = req.params;
 	const opinion = await Opinion.find({"productoId":id});
 	return res.json(opinion);
@@ -46,5 +46,5 @@ const readOpinionProd = async function readOpinionProd(req, res){
 module.exports = {
     createOpinion:createOpinion,
     readOpiniones:readOpiniones,
-    readOpinionProd:readOpinionProd
+    readOpinionProducto:readOpinionProducto
 }

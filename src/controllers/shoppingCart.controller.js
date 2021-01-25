@@ -1,14 +1,17 @@
+//Dependencias
 let ShoppingCart = require('../models/ShoppingCart');
 
 
+//Funciones
+
 //Leer carrito de compras
-const readShoppingCart = async function readShoppingCart(req, res){
+async function readShoppingCart(req, res){
     const shoppingCart = await ShoppingCart.find({"userId":req.userId});
     return res.json(shoppingCart);
 }
 
 //Agregar item al carrito de compras
-const updateShoppingCart = async function updateShoppingCart(req, res){
+async function addShoppingCartItem(req, res){
 	const {
         productId,
         quantity
@@ -23,7 +26,7 @@ const updateShoppingCart = async function updateShoppingCart(req, res){
 }
 
 //Eliminar item del carrito de compras
-const deleteShoppingCartItem = async function updateShoppingCart(req, res){
+async function deleteShoppingCartItem(req, res){
     const { productId } = req.params
 
     const deletedShopingCartItem = await ShoppingCart.findOneAndUpdate({userId:req.userId}, {
@@ -34,7 +37,7 @@ const deleteShoppingCartItem = async function updateShoppingCart(req, res){
 }
 
 module.exports = {
-    readShoppingCart:readShoppingCart,
-    updateShoppingCart:updateShoppingCart,
-    deleteShoppingCartItem:deleteShoppingCartItem
+    readShoppingCart,
+    addShoppingCartItem,
+    deleteShoppingCartItem
 }
