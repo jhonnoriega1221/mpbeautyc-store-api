@@ -61,10 +61,20 @@ async function loginUsuario(req, res){
 }
 
 
-async function getUsuario(req, res, next){
+async function getUsuarioLogued(req, res, next){
     
     //res.status(200).send(decoded);
     User.findById(req.userId, {password: 0}, function(err, user){
+        if (err) return res.status(500).send("Hubo un problema encontrando al usuario");
+        if (!user) return res.status(404).send("No se encontró al usuario");
+
+        res.status(200).send(user);
+    });
+}
+
+async function getUsuario(req, res){
+    const {id} = req.params;
+    User.findById(id, {password: 0}, function(err, user){
         if (err) return res.status(500).send("Hubo un problema encontrando al usuario");
         if (!user) return res.status(404).send("No se encontró al usuario");
 
@@ -76,5 +86,6 @@ async function getUsuario(req, res, next){
 module.exports = {
     loginUsuario,
     registerUsuario,
+    getUsuarioLogued,
     getUsuario
 }

@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const mongooseHidden = require ('mongoose-hidden')();
 
 const wishListSchema = new Schema({
     productId:String
@@ -6,7 +7,7 @@ const wishListSchema = new Schema({
 
 const userSchema = new Schema({
     email:String,
-    password:String,
+    password:{type:String, hide: true},
     name:String,
     surname:String,
     cc:Number,
@@ -17,5 +18,7 @@ const userSchema = new Schema({
     phoneNumber:Number,
     wishList:[wishListSchema]
 });
+
+userSchema.plugin(mongooseHidden);
 
 module.exports = model('User', userSchema);

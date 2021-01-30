@@ -1,13 +1,15 @@
 //Dependencias
 const Producto = require('../models/Producto');
 const Pedido = require('../models/Pedido');
+const User = require('../models/User');
+const { Types } = require('mongoose');
 
 //funciones
 
 //Crear pedido
 async function createPedido(req, res){
 
-    const userId = req.userId;
+    const userId = Types.ObjectId(req.userId);
     const{
         status="Pendiente",
         shippingCost,
@@ -49,6 +51,23 @@ async function createPedido(req, res){
     });
 }
 
+async function getPedidos(req, res){
+    
+    const pedidos = await Pedido.aggregate([
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'userData'
+            }
+        }
+    ]);
+
+    return res.json(pedidos);
+}
+
 //Obtener los pedidos de un usuario
 async function getPedidosUsuario(req, res){
     
@@ -62,16 +81,32 @@ async function getPedido(req, res){
     
     const id = req.params.pedidoId;
 
-    const pedido = await Pedido.findById(id);
+    const pedido = await Pedido.aggregate([
+        { $match:{_id:Types.ObjectId(id)}},
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'userData'
+            }
+        }
+    ]);
 
     return res.json(pedido);
 }
 
 //Cancelar pedido
 async function cancelPedido(req, res){
-    const { id } = req.params
 
-    await Pedido.findByIdAndUpdate({_id:req.params.pedidoId},{
+    const id = req.params.pedidoId;
+    const status = await Pedido.findById(id);
+
+    if(status.status == 'Entregado' || status.status == 'En camino')
+        return res.status(400).send('No se puede cancelar el pedido');
+    
+    await Pedido.findByIdAndUpdate(id,{
         status:"Cancelado"
     }, async function(err,result){
         if(err){
@@ -85,12 +120,38 @@ async function cancelPedido(req, res){
             res.send(result)
         }
     });
+}
 
+async function updatePedido(req, res){
+    const id = req.params.pedidoId;
+    
+    const status = await Pedido.findById(id);
+
+    if(status.status == 'Entregado' || status.status == 'Cancelado')
+        return res.status(400).send("No se pudo realizar la operación")
+
+    let newStatus;
+
+    if(status.status == 'Pendiente')
+        newStatus = 'En preparación';
+    else if(status.status == 'En preparación')
+        newStatus = 'En camino';
+    else if(status.status == 'En camino'){
+        newStatus = 'Entregado';
+        //Aqui se agrega la venta
+    }
+
+        const pedidoUpdated = await Pedido.findByIdAndUpdate(id,{
+            status: newStatus
+        });
+        return res.status(200).send(pedidoUpdated);
 }
 
 module.exports = {
     createPedido,
     cancelPedido,
     getPedidosUsuario,
-    getPedido
+    getPedido,
+    getPedidos,
+    updatePedido
 }

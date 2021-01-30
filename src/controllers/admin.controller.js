@@ -37,7 +37,7 @@ async function loginAdmin(req, res){
     });
 }
 
-async function getAdmin(req, res){
+async function getAdminLogued(req, res){
     Admin.findById(req.adminId, {adminPassword: 0}, function(err, admin){
         if (err) return res.status(500).send("Hubo un problema encontrando al admin");
         if (!admin) return res.status(404).send("No eres el admin 😠, IDENTIFICATE!!!");
@@ -46,9 +46,52 @@ async function getAdmin(req, res){
     })
 }
 
+async function getAdmins(req, res){
+    const admins = await Admin.find({});
+    return res.status(200).send(admins);
+}
+
+async function getAdmin(req, res){
+    const {id} = req.params;
+    const admin = await Admin.findById(id);
+
+    return res.status(200).send(admin);
+}
+
+async function updateAdmin(req, res){
+    const {id} = req.params;
+    const{
+        adminName,
+        adminEmail
+    } = req.body
+
+
+    const updatedAdmin = await Admin.findByIdAndUpdate(id,{
+        adminName,
+        adminEmail
+        },{new:true});
+        return res.json({
+            message: 'Admin actualizado',
+            updatedAdmin
+        });
+    
+}
+
+async function deleteAdmin(req, res){
+    const { id } = req.params;
+
+    const deletedAdmin = await Admin.findByIdAndDelete(id);
+
+    return res.status(200).send("Admin eliminado");
+}
+
 //Exportaciones
 module.exports = {
     registerAdmin,
     loginAdmin,
-    getAdmin
+    getAdminLogued,
+    getAdmins,
+    getAdmin,
+    updateAdmin,
+    deleteAdmin
 }

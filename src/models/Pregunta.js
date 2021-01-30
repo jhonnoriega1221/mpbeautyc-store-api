@@ -1,8 +1,8 @@
 const { Schema, model } = require('mongoose');
 
 const preguntaSchema = new Schema({
-    usuarioId:String,
-    productoId:String,
+    usuarioId: Schema.Types.ObjectId,
+    productoId:Schema.Types.ObjectId,
     preguntaUsuario:String,
     respuesta:String
 },{

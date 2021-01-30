@@ -15,18 +15,27 @@ const userController = require('../controllers/user.controller');
 
 /*--------------RUTAS ADMIN-------------------- */
 router.route('/admin')
-	.get(verifyToken.verifyAdminToken, adminController.getAdmin);
+	.get(verifyToken.verifyAdminToken, adminController.getAdminLogued);
+
+router.route('/admin/admin')
+	.get(verifyToken.verifyAdminToken, adminController.getAdmins)
+	.post(adminController.registerAdmin);
+
+router.route('/admin/admin/:id')
+	.get(verifyToken.verifyAdminToken, adminController.getAdmin)
+	.put(verifyToken.verifyAdminToken, adminController.updateAdmin)
+	.delete(verifyToken.verifyAdminToken, adminController.deleteAdmin);
 
 router.route('/admin/login')
 	.post(adminController.loginAdmin);
 
-router.route('/admin/signup')
-	.post(adminController.registerAdmin);
-
 /*--------------RUTAS USUARIO---------------- */
 
+router.route('/user/:id')
+	.get(verifyToken.verifyAdminToken, userController.getUsuario);
+
 router.route('/user')
-	.get(verifyToken.verifyUserToken, userController.getUsuario);
+	.get(verifyToken.verifyUserToken, userController.getUsuarioLogued);
 
 router.route('/user/login')
 	.post(userController.loginUsuario);
@@ -50,11 +59,16 @@ router.route('/?busqueda=:query') //Resultados de busqueda de productos
 
 	/*-----------RUTAS PREGUNTAS------------*/
 router.route('/pregunta')
-	.get(preguntaController.readPreguntas)
+	.get(verifyToken.verifyAdminToken, preguntaController.readPreguntas)
+
+router.route('/pregunta/:id')	
+	.get(verifyToken.verifyAdminToken, preguntaController.readPregunta)
+	.put(verifyToken.verifyAdminToken, preguntaController.responderPregunta);
+
+router.route('/producto/:productoId/pregunta') //Preguntas de un producto en especifico
+	.get(preguntaController.readPreguntasProducto)
 	.post(verifyToken.verifyUserToken, preguntaController.createPregunta);
 
-router.route('/pregunta/:id') //Preguntas de un producto en especifico
-	.get(preguntaController.readPreguntasProducto);
 
 	/*------------RUTAS OPINIONES-------------- */
 
@@ -86,10 +100,12 @@ router.route('/pedido/user')
 	.get(verifyToken.verifyUserToken, pedidoController.getPedidosUsuario);
 
 router.route('/pedido')
-	.post(verifyToken.verifyUserToken, pedidoController.createPedido);
+	.post(verifyToken.verifyUserToken, pedidoController.createPedido)
+	.get(verifyToken.verifyAdminToken, pedidoController.getPedidos);
 
 router.route('/pedido/:pedidoId')
 	.delete(verifyToken.verifyUserToken, pedidoController.cancelPedido)
-	.get(verifyToken.verifyUserToken, pedidoController.getPedido);
+	.get(verifyToken.verifyUserToken, pedidoController.getPedido)
+	.put(verifyToken.verifyAdminToken, pedidoController.updatePedido);
 
 module.exports = router;

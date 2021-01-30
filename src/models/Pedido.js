@@ -1,4 +1,4 @@
-const{ Schema, model } = require('mongoose');
+const{ Schema, model, Mongoose } = require('mongoose');
 
 const pedidoItemSchema = new Schema({
     productId:String,
@@ -15,7 +15,7 @@ const pedidoItemSchema = new Schema({
 });
 
 const pedidoSchema = new Schema({
-    userId:String,
+    userId: Schema.Types.ObjectId,
     status:String,
     shippingCost:Number,
     productsTotal:Number,
