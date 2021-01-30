@@ -138,7 +138,15 @@ async function updatePedido(req, res){
         newStatus = 'En camino';
     else if(status.status == 'En camino'){
         newStatus = 'Entregado';
-        //Aqui se agrega la venta
+    
+        const pedido = await Pedido.findById(id);
+
+        for(let i=0;i<pedido.products.length;i++){
+            await Producto.findByIdAndUpdate(pedido.products[i].productId,{
+                $inc:{"soldTimes":pedido.products[i].quantity}
+            });
+        }
+
     }
 
         const pedidoUpdated = await Pedido.findByIdAndUpdate(id,{
