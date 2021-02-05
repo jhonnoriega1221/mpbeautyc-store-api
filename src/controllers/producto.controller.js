@@ -1,5 +1,14 @@
 //Dependencias
-const Producto = require('../models/Producto')
+const Producto = require('../models/Producto');
+const cloudinary = require('cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const fs = require('fs-extra');
 
 //Funciones
 
@@ -36,10 +45,11 @@ async function createProducto(req, res){
 
     const producto = new Producto(newProducto);
     if(req.file) {
-        const { filename } = req.file;
-        producto.setImgUrl( filename );
+        const result = await cloudinary.v2.uploader.upload(req.file.path);
+        producto.setImgUrl( result.url );
     }
     await producto.save();
+    await fs.unlink(req.file.path);
 
     return res.json({
         message: 'Producto almacenado',

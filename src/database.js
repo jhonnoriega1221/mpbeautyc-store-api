@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.DATABASE,{
+mongoose.connect('mongodb://localhost/mpbeautyc-store',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
