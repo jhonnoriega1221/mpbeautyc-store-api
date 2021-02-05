@@ -27,7 +27,7 @@ const productoSchema = new Schema({
 productoSchema.index({ name: 'text'});
 
 productoSchema.methods.setImgUrl = function setImgUrl( filename ){
-    this.imgUrl = 'http://localhost:3000/public/'+filename;
+    this.imgUrl = process.env.HOST+'/public/'+filename;
 }
 
 module.exports = model('Producto', productoSchema);
