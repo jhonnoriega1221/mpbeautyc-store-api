@@ -19,7 +19,7 @@ router.route('/admin')
 
 router.route('/admin/admin')
 	.get(verifyToken.verifyAdminToken, adminController.getAdmins)
-	.post(adminController.registerAdmin);
+	.post(verifyToken.verifyAdminToken, adminController.registerAdmin);
 
 router.route('/admin/admin/:id')
 	.get(verifyToken.verifyAdminToken, adminController.getAdmin)
@@ -108,4 +108,7 @@ router.route('/pedido/:pedidoId')
 	.get(verifyToken.verifyUserToken, pedidoController.getPedido)
 	.put(verifyToken.verifyAdminToken, pedidoController.updatePedido);
 
+/*------------RUTAS DE VENTAS*----------------*/
+router.route('/venta')
+	.get(verifyToken.verifyAdminToken, pedidoController.getPedidosEntregados);
 module.exports = router;

@@ -10,13 +10,14 @@ async function registerAdmin(req, res){
         adminName:req.body.adminName,
         adminEmail:req.body.adminEmail,
         adminPassword:hashedPassword,
-        isAdmin:req.body.isAdmin
+        isAdmin:true
     },
     async function(err, admin){
         if(err) return res.status(500).send('Hubo un problema al registrar al admin');
-    
-        res.status(200).send('Admin creado, bienvenido, admin');
+return res.json({
+        message: 'Admin creado'
     });
+        });
 }
 
 async function loginAdmin(req, res){
@@ -82,7 +83,9 @@ async function deleteAdmin(req, res){
 
     const deletedAdmin = await Admin.findByIdAndDelete(id);
 
-    return res.status(200).send("Admin eliminado");
+    return res.json({
+        message: 'Admin eliminado'
+    });
 }
 
 //Exportaciones

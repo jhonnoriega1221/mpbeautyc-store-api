@@ -155,11 +155,29 @@ async function updatePedido(req, res){
         return res.status(200).send(pedidoUpdated);
 }
 
+async function getPedidosEntregados(req, res){
+     const pedidos = await Pedido.aggregate([
+        { $match:{status:'Entregado'}},
+        {
+            $lookup:
+            {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'userData'
+            }
+        }
+    ]);
+    return res.json(pedidos);
+}
+
 module.exports = {
     createPedido,
     cancelPedido,
     getPedidosUsuario,
     getPedido,
     getPedidos,
-    updatePedido
+    updatePedido,
+
+    getPedidosEntregados
 }
