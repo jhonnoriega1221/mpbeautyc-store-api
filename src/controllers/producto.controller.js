@@ -61,6 +61,16 @@ async function createProducto(req, res){
 async function readProductos(req, res){
     const productos = await Producto.find().sort({"createdAt": -1});
     return res.json(productos);
+
+}
+
+//- Leer productos disponibles
+async function readProductosDisponibles(req, res){
+         const productos = await Producto.aggregate([
+        { $match:{unsubscribed:false}},
+        { $sort:{createdAt:-1}}
+    ]);
+    return res.json(productos);
 }
 
 //- Leer producto
@@ -144,6 +154,7 @@ module.exports = {
     createProducto,
     readProductos,
     readProducto,
+    readProductosDisponibles,
     buscarProducto,
     updateProducto,
     unsubscribeProducto,

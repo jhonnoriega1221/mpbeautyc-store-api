@@ -152,7 +152,10 @@ async function updatePedido(req, res){
         const pedidoUpdated = await Pedido.findByIdAndUpdate(id,{
             status: newStatus
         });
-        return res.status(200).send(pedidoUpdated);
+        return res.json(
+            {
+                'mensaje':'productos'
+            });
 }
 
 async function getPedidosEntregados(req, res){

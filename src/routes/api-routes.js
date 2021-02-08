@@ -48,6 +48,9 @@ router.route('/producto') //Todos los productos de la base de datos
 	.get(productoController.readProductos)
 	.post(verifyToken.verifyAdminToken, upload.single('image'), productoController.createProducto); //Crear producto
 
+router.route('/producto/status/available')
+	.get(productoController.readProductosDisponibles);
+
 router.route('/producto/:id') //Un producto en especifico
 	.get(productoController.readProducto)
 	.put(verifyToken.verifyAdminToken, productoController.updateProducto)
