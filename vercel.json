@@ -3,14 +3,14 @@
     "name": "mpbeautyc-store",
     "builds": [
         {
-            "src": "src/dist/main.js",
+            "src": "src/app.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "src/dist/main.js"
+            "dest": "src/app.js"
         }
     ]
 }
